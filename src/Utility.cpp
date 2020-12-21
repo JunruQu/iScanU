@@ -11,6 +11,8 @@
 #include <future>
 #include "ScannerManager.h"
 
+//provide utility functions for other cpp file
+
 bool debugMode = false;
 
 int openCriticalOutputFile(std::string path) {

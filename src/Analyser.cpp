@@ -8,8 +8,10 @@
 
 void (*analyse)(Scanner*);
 
-
 void basicAnalysis(Scanner* data) {
+//get [signo info->si_code] value from Scanner* data
+//get isValid value from function disassemble
+
     int signo = data->lastSigno;
     siginfo_t* info = data->lastInfo;
     void* context = data->lastContext;
@@ -29,6 +31,8 @@ void basicAnalysis(Scanner* data) {
 }
 
 void insnAnalysis(Scanner* data) {
+//same as basicAnalysis, only change output
+
     int signo = data->lastSigno;
     siginfo_t* info = data->lastInfo;
     void* context = data->lastContext;

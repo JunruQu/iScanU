@@ -14,7 +14,9 @@
 #include <sched.h>
 #include <fcntl.h>
 
+//scanner manager for memcage method
 ScannerManagerMC::ScannerManagerMC(int _numThreads, uint64_t first, uint64_t last) : ScannerManager(_numThreads) {
+
     registerHandlers();
     createCriticalOutputDir();
     setAltStack(altStack);
@@ -67,6 +69,7 @@ ScannerManagerMC::~ScannerManagerMC() {
 
 }
 
+//initiate Scanner* data, assign initial values
 void ScannerManagerMC::localScannerInit(Scanner* data) {
     data->oldNumInstrExec = 0;
     data->numInstrExec = 0;
@@ -78,10 +81,15 @@ void ScannerManagerMC::localScannerInit(Scanner* data) {
     data->currentInstructionSize = instructionSize;
 }
 
+//begin to run scanner
 void ScannerManagerMC::runScanners() {
+
     bool allReady = false;
+    //check all threads in threadDataMap, if thread.second->isReady = true
+    //if all isReady = true, allReady = true
     while(!allReady) {
         allReady = true;
+        
         for(const auto& thread : threadDataMap) {
             if(!thread.second->isReady) {
                 allReady = false;
@@ -89,14 +97,17 @@ void ScannerManagerMC::runScanners() {
             }
         }
     }
+
+    //send SIGUSR1 to all threads in threadDataMap
     for(const auto& thread : threadDataMap) {
         kill(thread.first, SIGUSR1);
     }
 
+    //generate SIGALRM after 1 second
     alarm(1);
 }
 
-
+//initiate standard page
 void ScannerManagerMC::initStdPage() {
     stdPage = (uint8_t*) malloc(pageSize);
     assert(pageSize % fillerInstructionSize == 0);
@@ -105,23 +116,27 @@ void ScannerManagerMC::initStdPage() {
     }
 }
 
-
+//register handlers for SIG generated
 void ScannerManagerMC::registerHandlers() {
     struct sigaction sa;
     memset(&sa, 0, sizeof(struct sigaction));
     sigemptyset(&sa.sa_mask);
+
+    //whatever SIG, execute function faultHandler()
     sa.sa_sigaction = faultHandler;
     sa.sa_flags   = SA_SIGINFO | SA_ONSTACK;
     for (int i = 1; i < 32; ++i) {
         sigaction(i, &sa, NULL);
     }
-
+    //if get SIGALRM, execute function alarmHandler()
 	sa.sa_sigaction = alarmHandler;
 	sigaction(SIGALRM, &sa, NULL);
-
+    
+    //if get SIGUSR1, execute function entryHandler()
     sa.sa_sigaction = entryHandler;
 	sigaction(SIGUSR1, &sa, NULL);
 
+    //if get SIGUSR2, execute function hangHandler()
     sa.sa_sigaction = hangHandler;
 	sigaction(SIGUSR2, &sa, NULL);
 }

@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.inc": "cpp",
+        "*.tcc": "cpp",
+        "future": "cpp",
+        "optional": "cpp",
+        "numeric": "cpp",
+        "cmath": "cpp"
+    }
+}

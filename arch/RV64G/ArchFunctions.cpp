@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ucontext.h>
 
+/*
 void setState(mcontext_t* context, reg_t pc, reg_t regs[]) {
     memset((void*)(context->__gregs) , 0, registerFileSize);
     context->__gregs[REG_PC] = pc;
@@ -80,3 +81,4 @@ bool riscvgOnlyFetch(Scanner* data, instr_t* nextInstruction) {
         return false;
     }
 }
+*/

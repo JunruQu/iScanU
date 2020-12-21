@@ -24,16 +24,17 @@
 
 Scanner* data = NULL;
 
+//write given intruction to given address
 void writeInstruction(uint8_t* addr, instr_t instr) {
     memcpy(addr, &instr, data->currentInstructionSize);
 }
 
-
+//write standard page to given page address
 void writeStdPage(uint8_t* addr) {
     memcpy(addr, stdPage, pageSize);
 }
 
-
+//initiate scanner
 void* initScanner(void* ptr) {
 	Scanner* scannerData = (Scanner*)ptr;
     data = scannerData;
@@ -45,7 +46,9 @@ void* initScanner(void* ptr) {
     data->instructionPage = instructionPage;
     data->instructionPointer = instructionPage + pageSize - data->currentInstructionSize;
 
+    //set alternative stack address
     setAltStack(data->altStack);
+    //initiate disassembler
     initDisassembler(data);
     data->isReady = true;
 	pause(); //Wait for start signal
@@ -65,7 +68,7 @@ void setAltStack(stack_t& altStack) {
 
 //==============================================================================
 //ptrace methods:
-
+/*
 int initScannerPtrace(void* ptr) {
     Scanner* scannerData = (Scanner*)ptr;
     scannerData->instructionPointer = (uint8_t*)mmap(NULL, pageSize, PROT_WRITE | PROT_READ | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, 0, 0);
@@ -144,3 +147,4 @@ void ptraceLoop(pid_t pid, Scanner* scannerData) {
     write(data->outputFD, start.c_str(), start.size());
     exit(0);
 }
+*/

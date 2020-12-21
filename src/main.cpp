@@ -12,6 +12,8 @@
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
+
+    //set variables
     const int MAX_THREADS_MEMCAGE = 96;
     int numThreads = 1;
     int numCores = 1;
@@ -26,6 +28,7 @@ int main(int argc, char *argv[]) {
         lastInstruction = ((reg_t)1 << (instructionSize * 8)) - 1;
     }
 
+    //get and handle options
     uint64_t arg;
     int option;
     while ((option = getopt(argc, argv, "j:b:e:a:mpkid")) != -1) {
@@ -81,6 +84,7 @@ int main(int argc, char *argv[]) {
 
     }
 
+    //set ScannerManager pointer
     ScannerManager* scannerManager;
     switch (method) {
         case Method::MEMCAGE:
@@ -97,6 +101,7 @@ int main(int argc, char *argv[]) {
     if(setAffinity) {
         scannerManager->setAffinity(numCores);
     }
+    //execute function runScanners()
     scannerManager->runScanners();
     while(true) {
         pause();

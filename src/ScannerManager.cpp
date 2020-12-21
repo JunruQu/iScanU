@@ -2,6 +2,7 @@
 #include <string.h>
 #include <sched.h>
 #include <cerrno>
+//provide some functions needed for ScannerManagerMC or ScannerManagerPtrace
 
 uint8_t* stdPage;
 std::unordered_map<pid_t, Scanner*> threadDataMap;
@@ -20,7 +21,7 @@ void removeThread(pid_t tid) {
     threadDataMap.erase(tid);
 }
 
-
+//set affinity of thread
 void ScannerManager::setAffinity(int numCores) {
     cpu_set_t* cpuSet = CPU_ALLOC(numCores);
     size_t cpuSetSize =  CPU_ALLOC_SIZE(numCores);
