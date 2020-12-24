@@ -68,7 +68,7 @@ void setAltStack(stack_t& altStack) {
 
 //==============================================================================
 //ptrace methods:
-/*
+
 int initScannerPtrace(void* ptr) {
     Scanner* scannerData = (Scanner*)ptr;
     scannerData->instructionPointer = (uint8_t*)mmap(NULL, pageSize, PROT_WRITE | PROT_READ | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, 0, 0);
@@ -147,4 +147,4 @@ void ptraceLoop(pid_t pid, Scanner* scannerData) {
     write(data->outputFD, start.c_str(), start.size());
     exit(0);
 }
-*/
+

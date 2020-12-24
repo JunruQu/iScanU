@@ -174,7 +174,7 @@ void hangHandler(int signo, siginfo_t* info, void* context) {
 
 //==============================================================================
 //Ptrace Handlers
-/*
+
 void startHandlerPtrace(int signo, siginfo_t* info, void* context) {
 
 }
@@ -198,4 +198,3 @@ void hangHandlerPtrace(int signo, siginfo_t* info, void* context) {
     setState(&ucontext->uc_mcontext, (reg_t)data->instructionPointer, NULL);
     clearCache(data->instructionPage, data->instructionPage + pageSize);
 }
-*/

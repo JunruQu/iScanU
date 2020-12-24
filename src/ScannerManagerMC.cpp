@@ -21,18 +21,19 @@ ScannerManagerMC::ScannerManagerMC(int _numThreads, uint64_t first, uint64_t las
     createCriticalOutputDir();
     setAltStack(altStack);
     initStdPage();
+
     checkForHang = true;
     managerFD = openCriticalOutputFile("results/manager");
     performanceLogFD = openCriticalOutputFile("results/performance");
     performanceLogSlowFactor = 10; //once every 10 alarms
     performanceLogCount = 0;
-
     if (last - first < (uint64_t)numThreads && last - first > 0) {
         numThreads = last - first;
     }
     uint64_t instrPerThread = (last - first) / numThreads;
     reg_t startInstruction = first;
     reg_t finalInstruction = first + instrPerThread;
+    
     //Setup all scanner units
     for (int i = 0; i < numThreads; ++i) {
         Scanner* scannerData = (Scanner*)mmap(NULL, sizeof(Scanner), PROT_WRITE | PROT_READ, MAP_SHARED | MAP_ANONYMOUS | MAP_NORESERVE, 0, 0);

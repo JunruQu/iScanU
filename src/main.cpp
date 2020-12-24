@@ -13,7 +13,7 @@
 
 int main(int argc, char *argv[]) {
 
-    //set variables
+    //assign initial values to veriables
     const int MAX_THREADS_MEMCAGE = 96;
     int numThreads = 1;
     int numCores = 1;
@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
     uint64_t firstInstruction = 0;
     uint64_t lastInstruction = MaxNumInstructions - 1;
     method = Method::MEMCAGE;
+
     //set fetch and analysis function pointers
     analyse = &basicAnalysis;
     fetchInstruction = &exhaustive;
@@ -85,6 +86,7 @@ int main(int argc, char *argv[]) {
     }
 
     //set ScannerManager pointer
+    //create new object scannerManager from class ScannerManager, and execute the constructor ScannerManagerMC()
     ScannerManager* scannerManager;
     switch (method) {
         case Method::MEMCAGE:
@@ -98,9 +100,11 @@ int main(int argc, char *argv[]) {
         case Method::KERNELMOD: scannerManager = new ScannerManagerMC(numThreads, firstInstruction, lastInstruction); break; //TODO:
     }
 
+    //set affinity of thread
     if(setAffinity) {
         scannerManager->setAffinity(numCores);
     }
+    
     //execute function runScanners()
     scannerManager->runScanners();
     while(true) {
