@@ -48,7 +48,7 @@ void faultHandler(int signo, siginfo_t* info, void* context) {
     writeInstruction(data->instructionPointer, nextInstruction);
     data->currentInstruction = nextInstruction;
 
-    //set state and clear cache
+    //reset context
     ucontext_t* ucontext = (ucontext_t*)context;
     setState(&ucontext->uc_mcontext, (reg_t)data->instructionPointer, NULL);
     clearCache(data->instructionPage, data->instructionPage + pageSize);
@@ -135,7 +135,7 @@ void entryHandler(int signo, siginfo_t* info, void* context) {
     //write current istruction to address of instruction pointer
     writeInstruction(data->instructionPointer, data->currentInstruction);
 
-    //set state and clear cache
+    //reset context
     ucontext_t* ucontext = (ucontext_t*)context;
     setState(&ucontext->uc_mcontext, (reg_t)data->instructionPointer, NULL);
     clearCache(data->instructionPage, data->instructionPage + pageSize);
@@ -166,7 +166,7 @@ void hangHandler(int signo, siginfo_t* info, void* context) {
     //write current instruction to address of instruction pointer
 	writeInstruction(data->instructionPointer, data->currentInstruction);
     
-    //set state and clear cache
+    //reset context
 	ucontext_t* ucontext = (ucontext_t*)context;
     setState(&ucontext->uc_mcontext, (reg_t)data->instructionPointer, NULL);
     clearCache(data->instructionPage, data->instructionPage + pageSize);
