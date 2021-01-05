@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     method = Method::MEMCAGE;
 
     //set fetch and analysis function pointers
-    analyse = &basicAnalysis;
+    analyse = &myAnalysis;
     fetchInstruction = &exhaustive;
     if(variableLengthEncoding) {
         lastInstruction = ((reg_t)1 << (instructionSize * 8)) - 1;
