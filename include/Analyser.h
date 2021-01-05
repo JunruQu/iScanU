@@ -9,3 +9,5 @@ void basicAnalysis(Scanner* data);
 
 //Gives more information on every scanned instruction
 void insnAnalysis(Scanner* data);
+
+void myAnalysis(Scanner* data);

@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <string>
 #include <string.h>
+#include <bitset>
 
 void (*analyse)(Scanner*);
 
@@ -52,4 +53,30 @@ void insnAnalysis(Scanner* data) {
         output = "Hidden\n";
         write(data->outputFD, output.c_str(), output.size());
     }
+}
+
+void myAnalysis(Scanner* data) {
+//get [signo info->si_code] value from Scanner* data
+//get isValid value from function disassemble
+
+    int signo = data->lastSigno;
+    siginfo_t* info = data->lastInfo;
+    void* context = data->lastContext;
+
+    int tempInst=data->currentInstruction;
+
+    bool isValid = disassemble(data, data->currentInstruction, NULL);
+
+    std::bitset<32> bitInst(tempInst);
+
+    //Log instruction if it is a disassembler fault or hidden instruction
+    //instruction is not recognized when SIGILL is delivered with si_code ILL_ILLOPC
+	if(signo == SIGILL && info->si_code == ILL_ILLOPC && isValid) {
+        std::string output = "D " + bitInst.to_string();+ " " + std::to_string(signo) + " " + std::to_string(info->si_code) + "\n";
+        write(data->outputFD, output.c_str(), output.size());
+	}
+	else if(!(signo == SIGILL && info->si_code == ILL_ILLOPC) && !isValid) {
+        std::string output = "H " + bitInst.to_string();+ " " + std::to_string(signo) + " " + std::to_string(info->si_code) + "\n";
+        write(data->outputFD, output.c_str(), output.size());
+	}
 }
